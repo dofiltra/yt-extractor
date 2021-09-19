@@ -5,11 +5,11 @@ const debug = async () => {
     maxOpenedBrowsers: 1
   })
 
-  console.log(
-    await yt.video({
-      videoId: 'KaYzuCDwDrg'
-    })
-  )
+  //   console.log(
+  await yt.video({
+    videoId: 'KaYzuCDwDrg'
+  })
+  //   )
 }
 
 debug()

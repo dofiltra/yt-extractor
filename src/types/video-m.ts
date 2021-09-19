@@ -991,7 +991,9 @@ export interface StructuredDescriptionContentRendererItem {
   expandableVideoDescriptionBodyRenderer?: ExpandableVideoDescriptionBodyRenderer
 }
 
-export interface ExpandableVideoDescriptionBodyRenderer {}
+export interface ExpandableVideoDescriptionBodyRenderer {
+  [x: string]: any
+}
 
 export interface VideoDescriptionHeaderRenderer {
   title?: Title

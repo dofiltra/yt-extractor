@@ -61,9 +61,13 @@ class YtExtractor {
     }
   }
 
-  async search(opts: TYtSearchOpts) {}
+  async search(opts: TYtSearchOpts) {
+    // TODO
+  }
 
-  async channel(opts: TYtChannelOpts) {}
+  async channel(opts: TYtChannelOpts) {
+    // TODO
+  }
 
   private async getPwrt(url: string) {
     const { appPath, maxOpenedBrowsers = 1 } = this._settings
@@ -95,9 +99,9 @@ class YtExtractor {
 
     const hrefElem = await page?.$(selector)
     const newHref = `/watch?v=${videoId}`
-    await hrefElem?.evaluate((e, { newHref }) => e.setAttribute('href', newHref), { newHref })
+    await hrefElem?.evaluate((e, { href }) => e.setAttribute('href', href), { href: newHref })
     await hrefElem?.click()
-    const videoResponse = (await pwrt?.getRespResult<IVideoMobileResponse[]>(page!, newHref)) as IVideoMobileResponse[]
+    const videoResponse = (await pwrt?.getRespResult<IVideoMobileResponse[]>(page, newHref)) as IVideoMobileResponse[]
 
     return videoResponse
   }
