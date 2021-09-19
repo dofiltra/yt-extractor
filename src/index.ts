@@ -1,8 +1,10 @@
-import { BrowserManager, devices } from 'browser-manager'
+import { BrowserManager, devices, Page } from 'browser-manager'
 import { TYtSearchOpts, TYtExtractorSettings, TYtVideoOpts, TYtChannelOpts } from './types/extractor'
+import { IVideoMobileResponse } from './types/video-m'
 
 class YtExtractor {
   private _settings: TYtExtractorSettings
+  private _mainUrl = `https://m.youtube.com`
 
   constructor(s?: TYtExtractorSettings) {
     this._settings = { ...s }
@@ -12,10 +14,24 @@ class YtExtractor {
     const { videoId } = opts
 
     try {
-      const url = `https://m.youtube.com/watch?v=${videoId}`
-      const { pwrt, page } = await this.getPwrt(url)
-    } catch (e) {
-      console.log(e)
+      const selector = `a[href^="/watch?v="]`
+      const { pwrt, page } = await this.getPwrt(this._mainUrl)
+
+      await page?.waitForSelector(selector, {
+        timeout: 10e3
+      })
+
+      const hrefElem = await page?.$(selector)
+      const newHref = `/watch?v=${videoId}`
+      await hrefElem?.evaluate((e, { newHref }) => e.setAttribute('href', newHref), { newHref })
+      await hrefElem?.click()
+
+      const result = await pwrt?.getRespResult<IVideoMobileResponse>(page!, newHref)
+      await pwrt?.close()
+
+      return { result }
+    } catch (error) {
+      return { error }
     }
   }
 
@@ -28,7 +44,7 @@ class YtExtractor {
 
     const pwrt: BrowserManager = await BrowserManager.build({
       launchOpts: {
-        headless: true
+        headless: false
       },
       device: devices['Pixel 5'],
       idleCloseSeconds: 60,
@@ -41,8 +57,6 @@ class YtExtractor {
       await pwrt.close()
       return { error: 'no page' }
     }
-
-    
 
     return { page, pwrt }
   }
