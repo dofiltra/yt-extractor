@@ -1,13 +1,4 @@
-type TYtExtractorSettings = {}
-
-type TExtractOpts = {
-  urls?: string[]
-}
-
-type TExtractItem = {
-  title: string
-  description: string
-}
+import { TYtExtractorSettings } from './types/extractor'
 
 class YtExtractor {
   private _settings: TYtExtractorSettings
