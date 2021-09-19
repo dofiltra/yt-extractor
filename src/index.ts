@@ -70,7 +70,7 @@ class YtExtractor {
 
     const pwrt: BrowserManager = await BrowserManager.build({
       launchOpts: {
-        headless: false
+        headless: true
       },
       device: devices['Pixel 5'],
       idleCloseSeconds: 60,

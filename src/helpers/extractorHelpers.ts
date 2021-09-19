@@ -15,7 +15,7 @@ export function getCommentsRenderer(onResponseReceivedEndpoints?: OnResponseRece
 export function getRelatedItems(singleColumnWatchNextResults?: SingleColumnWatchNextResults) {
   return (
     singleColumnWatchNextResults?.results?.results?.contents
-      ?.find((x) => x.itemSectionRenderer?.targetId === 'related-items')
+      ?.find((x) => x.itemSectionRenderer?.sectionIdentifier === 'related-items')
       ?.itemSectionRenderer?.contents?.filter((x) => x.videoWithContextRenderer)
       ?.map((x) => x.videoWithContextRenderer!) || []
   )
