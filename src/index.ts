@@ -1,7 +1,8 @@
 import { BrowserManager, devices, Page } from 'browser-manager'
-import { IYtCommentsResponse } from './types/comments'
+import { getCommentsRenderer, getRelatedItems } from './helpers/extractorHelpers'
+import { CommentRenderer, IYtCommentsResponse } from './types/comments'
 import { TYtSearchOpts, TYtExtractorSettings, TYtVideoOpts, TYtChannelOpts, TYtVideoResult } from './types/extractor'
-import { IVideoMobileResponse } from './types/video-m'
+import { FluffyVideoWithContextRenderer, IVideoMobileResponse } from './types/video-m'
 
 class YtExtractor {
   private _settings: TYtExtractorSettings
@@ -20,12 +21,12 @@ class YtExtractor {
 
     const { playerResponse } = { ...result.videoResponse.find((tab) => tab.playerResponse) }
     const { response } = { ...result.videoResponse.find((tab) => tab.response) }
+    const { onResponseReceivedEndpoints = [] } = { ...result.commentsResponse }
 
-    const relatedItems =
-      response?.contents?.singleColumnWatchNextResults?.results?.results?.contents
-        ?.find((x) => x.itemSectionRenderer?.targetId === 'related-items')
-        ?.itemSectionRenderer?.contents?.filter((x) => x.videoWithContextRenderer)
-        ?.map((x) => x.videoWithContextRenderer!) || []
+    const relatedItems: FluffyVideoWithContextRenderer[] = getRelatedItems(
+      response?.contents?.singleColumnWatchNextResults
+    )
+    const comments: CommentRenderer[] = getCommentsRenderer(onResponseReceivedEndpoints)
 
     const resultExtract: TYtVideoResult = {
       videoDetails: playerResponse?.videoDetails,
@@ -33,7 +34,8 @@ class YtExtractor {
       captions: playerResponse?.captions,
       microformat: playerResponse?.microformat,
 
-      relatedItems
+      relatedItems,
+      comments
     }
 
     return { result: resultExtract }

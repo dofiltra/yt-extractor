@@ -1,3 +1,4 @@
+import { CommentRenderer } from './comments'
 import {
   Captions,
   FluffyVideoWithContextRenderer,
@@ -25,6 +26,7 @@ export type TYtVideoResult = {
   captions?: Captions
 
   relatedItems?: FluffyVideoWithContextRenderer[]
+  comments?: CommentRenderer[]
 }
 
 export type TYtChannelOpts = {
