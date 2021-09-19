@@ -1,4 +1,7 @@
-export type TYtExtractorSettings = {}
+export type TYtExtractorSettings = {
+  appPath?: string
+  maxOpenedBrowsers?: number
+}
 
 export type TYtSearchOpts = {
   query: string
