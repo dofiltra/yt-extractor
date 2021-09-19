@@ -1,5 +1,5 @@
 import { BrowserManager, devices, Page } from 'browser-manager'
-import { TYtSearchOpts, TYtExtractorSettings, TYtVideoOpts, TYtChannelOpts } from './types/extractor'
+import { TYtSearchOpts, TYtExtractorSettings, TYtVideoOpts, TYtChannelOpts, TYtVideoResult } from './types/extractor'
 import { IVideoMobileResponse } from './types/video-m'
 
 class YtExtractor {
@@ -11,6 +11,34 @@ class YtExtractor {
   }
 
   async video(opts: TYtVideoOpts) {
+    const { result = [], error } = await this.videoResponse(opts)
+
+    if (error) {
+      return { error }
+    }
+
+    const { playerResponse } = { ...result.find((tab) => tab.playerResponse) }
+    const { response } = { ...result.find((tab) => tab.response) }
+
+    const relatedItems =
+      response?.contents?.singleColumnWatchNextResults?.results?.results?.contents
+        ?.find((x) => x.itemSectionRenderer?.targetId === 'related-items')
+        ?.itemSectionRenderer?.contents?.filter((x) => x.videoWithContextRenderer)
+        ?.map((x) => x.videoWithContextRenderer!) || []
+
+    const resultExtract: TYtVideoResult = {
+      videoDetails: playerResponse?.videoDetails,
+      streamingData: playerResponse?.streamingData,
+      captions: playerResponse?.captions,
+      microformat: playerResponse?.microformat,
+
+      relatedItems
+    }
+
+    return { result: resultExtract }
+  }
+
+  async videoResponse(opts: TYtVideoOpts) {
     const { videoId } = opts
 
     try {
@@ -26,7 +54,7 @@ class YtExtractor {
       await hrefElem?.evaluate((e, { newHref }) => e.setAttribute('href', newHref), { newHref })
       await hrefElem?.click()
 
-      const result = await pwrt?.getRespResult<IVideoMobileResponse>(page!, newHref)
+      const result = (await pwrt?.getRespResult<IVideoMobileResponse[]>(page!, newHref)) as IVideoMobileResponse[]
       await pwrt?.close()
 
       return { result }
