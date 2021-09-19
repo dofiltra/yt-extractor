@@ -1,4 +1,4 @@
-import { TYtExtractorSettings } from './types/extractor'
+import { TYtSearchOpts, TYtExtractorSettings, TYtVideoOpts, TYtChannelOpts } from './types/extractor'
 
 class YtExtractor {
   private _settings: TYtExtractorSettings
@@ -7,9 +7,11 @@ class YtExtractor {
     this._settings = { ...s }
   }
 
-  async extractByQuery(query: string) {}
+  async search(opts: TYtSearchOpts) {}
 
-  async extractByUrls() {}
+  async video(opts: TYtVideoOpts) {}
+
+  async channel(opts: TYtChannelOpts) {}
 }
 
 export { YtExtractor }
