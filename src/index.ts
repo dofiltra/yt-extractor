@@ -1,4 +1,5 @@
 import { BrowserManager, devices, Page } from 'browser-manager'
+import { IYtCommentsResponse } from './types/comments'
 import { TYtSearchOpts, TYtExtractorSettings, TYtVideoOpts, TYtChannelOpts, TYtVideoResult } from './types/extractor'
 import { IVideoMobileResponse } from './types/video-m'
 
@@ -11,14 +12,14 @@ class YtExtractor {
   }
 
   async video(opts: TYtVideoOpts) {
-    const { result = [], error } = await this.videoResponse(opts)
+    const { result = { commentsResponse: {}, videoResponse: [] }, error } = await this.videoResponse(opts)
 
     if (error) {
       return { error }
     }
 
-    const { playerResponse } = { ...result.find((tab) => tab.playerResponse) }
-    const { response } = { ...result.find((tab) => tab.response) }
+    const { playerResponse } = { ...result.videoResponse.find((tab) => tab.playerResponse) }
+    const { response } = { ...result.videoResponse.find((tab) => tab.response) }
 
     const relatedItems =
       response?.contents?.singleColumnWatchNextResults?.results?.results?.contents
@@ -42,22 +43,17 @@ class YtExtractor {
     const { videoId } = opts
 
     try {
-      const selector = `a[href^="/watch?v="]`
       const { pwrt, page } = await this.getPwrt(this._mainUrl)
 
-      await page?.waitForSelector(selector, {
-        timeout: 10e3
-      })
+      if (!pwrt || !page) {
+        return { error: `pwrt: ${!!pwrt} | page: ${!!page}` }
+      }
 
-      const hrefElem = await page?.$(selector)
-      const newHref = `/watch?v=${videoId}`
-      await hrefElem?.evaluate((e, { newHref }) => e.setAttribute('href', newHref), { newHref })
-      await hrefElem?.click()
+      const videoResponse = await this.getVideoResponse(pwrt!, page!, videoId)
+      const commentsResponse = await this.getCommentsResponse(pwrt!, page!)
 
-      const result = (await pwrt?.getRespResult<IVideoMobileResponse[]>(page!, newHref)) as IVideoMobileResponse[]
       await pwrt?.close()
-
-      return { result }
+      return { result: { videoResponse, commentsResponse } }
     } catch (error) {
       return { error }
     }
@@ -87,6 +83,36 @@ class YtExtractor {
     }
 
     return { page, pwrt }
+  }
+
+  private async getVideoResponse(pwrt: BrowserManager, page: Page, videoId: string) {
+    const selector = `a[href^="/watch?v="]`
+    await page?.waitForSelector(selector, {
+      timeout: 10e3
+    })
+
+    const hrefElem = await page?.$(selector)
+    const newHref = `/watch?v=${videoId}`
+    await hrefElem?.evaluate((e, { newHref }) => e.setAttribute('href', newHref), { newHref })
+    await hrefElem?.click()
+    const videoResponse = (await pwrt?.getRespResult<IVideoMobileResponse[]>(page!, newHref)) as IVideoMobileResponse[]
+
+    return videoResponse
+  }
+
+  private async getCommentsResponse(pwrt: BrowserManager, page: Page) {
+    const commentsSelector = `ytm-comments-entry-point-header-renderer`
+    await page?.waitForSelector(commentsSelector, {
+      timeout: 10e3
+    })
+    const commentsElem = await page?.$(commentsSelector)
+    await commentsElem?.click()
+    const commentsResponse = (await pwrt?.getRespResult<IYtCommentsResponse>(
+      page!,
+      `youtubei/v1/next`
+    )) as IYtCommentsResponse
+
+    return commentsResponse
   }
 }
 
