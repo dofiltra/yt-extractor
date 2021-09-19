@@ -1,53 +1,53 @@
-export interface IYtResponse {
-  responseContext?: IResponseContext
+export interface IYtVideoResponse {
+  responseContext?: ResponseContext
   trackingParams?: string
-  contents?: IContents
-  currentVideoEndpoint?: ICurrentVideoEndpointClass
-  playerOverlays?: IPlayerOverlays
-  onResponseReceivedEndpoints?: IOnResponseReceivedEndpoint[]
-  engagementPanels?: IEngagementPanel[]
-  topbar?: ITopbar
-  frameworkUpdates?: IFrameworkUpdates
+  contents?: Contents
+  currentVideoEndpoint?: CurrentVideoEndpointClass
+  playerOverlays?: PlayerOverlays
+  onResponseReceivedEndpoints?: OnResponseReceivedEndpoint[]
+  engagementPanels?: EngagementPanel[]
+  topbar?: Topbar
+  frameworkUpdates?: FrameworkUpdates
 }
 
-export interface IContents {
-  twoColumnWatchNextResults?: ITwoColumnWatchNextResults
+export interface Contents {
+  twoColumnWatchNextResults?: TwoColumnWatchNextResults
 }
 
-export interface ITwoColumnWatchNextResults {
-  results?: ITwoColumnWatchNextResultsResults
+export interface TwoColumnWatchNextResults {
+  results?: TwoColumnWatchNextResultsResults
   secondaryResults?: TwoColumnWatchNextResultsSecondaryResults
-  autoplay?: ITwoColumnWatchNextResultsAutoplay
+  autoplay?: TwoColumnWatchNextResultsAutoplay
 }
 
-export interface ITwoColumnWatchNextResultsAutoplay {
-  autoplay?: IAutoplayAutoplay
+export interface TwoColumnWatchNextResultsAutoplay {
+  autoplay?: AutoplayAutoplay
 }
 
-export interface IAutoplayAutoplay {
-  sets?: ISet[]
+export interface AutoplayAutoplay {
+  sets?: Set[]
   countDownSecs?: number
   trackingParams?: string
 }
 
-export interface ISet {
+export interface Set {
   mode?: string
-  autoplayVideo?: INavigationEndpointElement
+  autoplayVideo?: NavigationEndpointElement
 }
 
-export interface INavigationEndpointElement {
+export interface NavigationEndpointElement {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
-  watchEndpoint?: IAutoplayVideoWatchEndpoint
+  commandMetadata?: AutoplayVideoCommandMetadata
+  watchEndpoint?: AutoplayVideoWatchEndpoint
 }
 
-export interface IAutoplayVideoCommandMetadata {
-  webCommandMetadata?: IPurpleWebCommandMetadata
+export interface AutoplayVideoCommandMetadata {
+  webCommandMetadata?: PurpleWebCommandMetadata
 }
 
-export interface IPurpleWebCommandMetadata {
+export interface PurpleWebCommandMetadata {
   url?: string
-  webPageType?: IWebPageType
+  webPageType?: WebPageType
   rootVe?: number
   apiUrl?: APIURL
 }
@@ -56,7 +56,7 @@ export enum APIURL {
   YoutubeiV1Browse = '/youtubei/v1/browse'
 }
 
-export enum IWebPageType {
+export enum WebPageType {
   WebPageTypeBrowse = 'WEB_PAGE_TYPE_BROWSE',
   WebPageTypeChannel = 'WEB_PAGE_TYPE_CHANNEL',
   WebPageTypeSearch = 'WEB_PAGE_TYPE_SEARCH',
@@ -64,83 +64,83 @@ export enum IWebPageType {
   WebPageTypeWatch = 'WEB_PAGE_TYPE_WATCH'
 }
 
-export interface IAutoplayVideoWatchEndpoint {
+export interface AutoplayVideoWatchEndpoint {
   videoId?: string
   params?: string
   playerParams?: string
-  watchEndpointSupportedPrefetchConfig?: IWatchEndpointSupportedPrefetchConfig
+  watchEndpointSupportedPrefetchConfig?: WatchEndpointSupportedPrefetchConfig
 }
 
-export interface IWatchEndpointSupportedPrefetchConfig {
-  prefetchHintConfig?: IPrefetchHintConfig
+export interface WatchEndpointSupportedPrefetchConfig {
+  prefetchHintConfig?: PrefetchHintConfig
 }
 
-export interface IPrefetchHintConfig {
+export interface PrefetchHintConfig {
   prefetchPriority?: number
   countdownUiRelativeSecondsPrefetchCondition?: number
 }
 
-export interface ITwoColumnWatchNextResultsResults {
-  results?: IResultsResults
+export interface TwoColumnWatchNextResultsResults {
+  results?: ResultsResults
 }
 
-export interface IResultsResults {
-  contents?: IResultsContent[]
+export interface ResultsResults {
+  contents?: ResultsContent[]
   trackingParams?: string
 }
 
-export interface IResultsContent {
-  videoPrimaryInfoRenderer?: IVideoPrimaryInfoRenderer
+export interface ResultsContent {
+  videoPrimaryInfoRenderer?: VideoPrimaryInfoRenderer
   videoSecondaryInfoRenderer?: VideoSecondaryInfoRenderer
-  itemSectionRenderer?: IItemSectionRenderer
+  itemSectionRenderer?: ItemSectionRenderer
 }
 
-export interface IItemSectionRenderer {
-  contents?: IItemSectionRendererContent[]
+export interface ItemSectionRenderer {
+  contents?: ItemSectionRendererContent[]
   trackingParams?: string
   sectionIdentifier?: string
   targetId?: string
 }
 
-export interface IItemSectionRendererContent {
-  continuationItemRenderer?: IPurpleContinuationItemRenderer
+export interface ItemSectionRendererContent {
+  continuationItemRenderer?: PurpleContinuationItemRenderer
 }
 
-export interface IPurpleContinuationItemRenderer {
+export interface PurpleContinuationItemRenderer {
   trigger?: string
-  continuationEndpoint?: IPurpleContinuationEndpoint
+  continuationEndpoint?: PurpleContinuationEndpoint
 }
 
-export interface IPurpleContinuationEndpoint {
+export interface PurpleContinuationEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
-  continuationCommand?: IContinuationCommand
+  commandMetadata?: ContinuationEndpointCommandMetadata
+  continuationCommand?: ContinuationCommand
 }
 
-export interface IContinuationEndpointCommandMetadata {
-  webCommandMetadata?: IFluffyWebCommandMetadata
+export interface ContinuationEndpointCommandMetadata {
+  webCommandMetadata?: FluffyWebCommandMetadata
 }
 
-export interface IFluffyWebCommandMetadata {
+export interface FluffyWebCommandMetadata {
   sendPost?: boolean
   apiUrl?: string
 }
 
-export interface IContinuationCommand {
+export interface ContinuationCommand {
   token?: string
   request?: string
 }
 
-export interface IVideoPrimaryInfoRenderer {
+export interface VideoPrimaryInfoRenderer {
   title?: Subtitle
   viewCount?: ViewCount
   videoActions?: VideoActions
   trackingParams?: string
   sentimentBar?: SentimentBar
-  dateText?: ICancelText
+  dateText?: CancelText
 }
 
-export interface ICancelText {
+export interface CancelText {
   simpleText?: string
 }
 
@@ -200,7 +200,7 @@ export interface Icon {
 
 export interface PurpleServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   getReportFormEndpoint?: GetTranscriptEndpointClass
   signalServiceEndpoint?: PurpleSignalServiceEndpoint
 }
@@ -248,7 +248,7 @@ export interface TopLevelButtonButtonRenderer {
 
 export interface CommandClass {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   shareEntityServiceEndpoint?: ShareEntityServiceEndpoint
   addToPlaylistServiceEndpoint?: AddToPlaylistServiceEndpoint
 }
@@ -317,7 +317,7 @@ export interface DefaultServiceEndpointCommandExecutorCommand {
 export interface PurpleCommand {
   clickTrackingParams?: string
   updateToggleButtonStateCommand?: UpdateToggleButtonStateCommand
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   likeEndpoint?: CommandLikeEndpoint
 }
 
@@ -352,7 +352,7 @@ export interface ToggleButtonIDData {
 
 export interface ToggleButtonRendererToggledServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   likeEndpoint?: ToggledServiceEndpointLikeEndpoint
 }
 
@@ -367,8 +367,8 @@ export interface ViewCount {
 }
 
 export interface VideoViewCountRenderer {
-  viewCount?: ICancelText
-  shortViewCount?: ICancelText
+  viewCount?: CancelText
+  shortViewCount?: CancelText
 }
 
 export interface VideoSecondaryInfoRenderer {
@@ -376,8 +376,8 @@ export interface VideoSecondaryInfoRenderer {
   description?: Description
   subscribeButton?: SubscribeButton
   metadataRowContainer?: MetadataRowContainer
-  showMoreText?: ICancelText
-  showLessText?: ICancelText
+  showMoreText?: CancelText
+  showLessText?: CancelText
   trackingParams?: string
   defaultExpanded?: boolean
   descriptionCollapsedLines?: number
@@ -394,7 +394,7 @@ export interface DescriptionRun {
 
 export interface OnTap {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
+  commandMetadata?: AutoplayVideoCommandMetadata
   watchEndpoint?: OnTapWatchEndpoint
 }
 
@@ -445,7 +445,7 @@ export interface VideoOwnerRenderer {
 
 export interface VideoOwnerRendererNavigationEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
+  commandMetadata?: AutoplayVideoCommandMetadata
   browseEndpoint?: NavigationEndpointBrowseEndpoint
 }
 
@@ -546,7 +546,7 @@ export interface MenuPopupRendererItem {
 }
 
 export interface FluffyMenuServiceItemRenderer {
-  text?: ICancelText
+  text?: CancelText
   icon?: Icon
   serviceEndpoint?: FluffyServiceEndpoint
   trackingParams?: string
@@ -555,7 +555,7 @@ export interface FluffyMenuServiceItemRenderer {
 
 export interface FluffyServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   modifyChannelNotificationPreferenceEndpoint?: GetTranscriptEndpointClass
 }
 
@@ -581,7 +581,7 @@ export interface ClearButtonButtonRenderer {
 
 export interface OnSubscribeEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   subscribeEndpoint?: SubscribeEndpoint
 }
 
@@ -644,13 +644,13 @@ export interface A11YSkipNavigationButtonButtonRenderer {
   trackingParams?: string
   serviceEndpoint?: TentacledServiceEndpoint
   command?: TentacledCommand
-  navigationEndpoint?: ICurrentVideoEndpointClass
+  navigationEndpoint?: CurrentVideoEndpointClass
 }
 
 export interface TentacledCommand {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
-  continuationCommand?: IContinuationCommand
+  commandMetadata?: ContinuationEndpointCommandMetadata
+  continuationCommand?: ContinuationCommand
   signalServiceEndpoint?: CommandSignalServiceEndpoint
 }
 
@@ -668,9 +668,9 @@ export interface Signal {
   signal?: string
 }
 
-export interface ICurrentVideoEndpointClass {
+export interface CurrentVideoEndpointClass {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
+  commandMetadata?: AutoplayVideoCommandMetadata
   watchEndpoint?: CurrentVideoEndpointWatchEndpoint
 }
 
@@ -681,7 +681,7 @@ export interface CurrentVideoEndpointWatchEndpoint {
 
 export interface TentacledServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   unsubscribeEndpoint?: SubscribeEndpoint
 }
 
@@ -705,8 +705,8 @@ export interface CompactVideoRenderer {
   thumbnail?: Background
   title?: ShortViewCountText
   longBylineText?: Byline
-  publishedTimeText?: ICancelText
-  viewCountText?: ICancelText
+  publishedTimeText?: CancelText
+  viewCountText?: CancelText
   lengthText?: ShortViewCountText
   navigationEndpoint?: CompactVideoRendererNavigationEndpoint
   shortBylineText?: Byline
@@ -756,7 +756,7 @@ export interface TentacledMenuServiceItemRenderer {
 
 export interface StickyServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   signalServiceEndpoint?: FluffySignalServiceEndpoint
   playlistEditEndpoint?: ServiceEndpointPlaylistEditEndpoint
   addToPlaylistServiceEndpoint?: AddToPlaylistServiceEndpoint
@@ -802,7 +802,7 @@ export interface PurpleButtonRenderer {
 
 export interface IndigoServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   undoFeedbackEndpoint?: UndoFeedbackEndpoint
   signalServiceEndpoint?: CommandSignalServiceEndpoint
 }
@@ -873,7 +873,7 @@ export enum ListType {
 
 export interface OnCreateListCommand {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   createPlaylistServiceEndpoint?: CreatePlaylistServiceEndpoint
 }
 
@@ -896,7 +896,7 @@ export interface StickyPopup {
 }
 
 export interface NotificationActionRenderer {
-  responseText?: ICancelText
+  responseText?: CancelText
   trackingParams?: string
 }
 
@@ -906,7 +906,7 @@ export enum FluffyPopupType {
 
 export interface CompactVideoRendererNavigationEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
+  commandMetadata?: AutoplayVideoCommandMetadata
   watchEndpoint?: PurpleWatchEndpoint
 }
 
@@ -992,7 +992,7 @@ export interface ThumbnailOverlayToggleButtonRenderer {
 
 export interface ThumbnailOverlayToggleButtonRendererToggledServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   playlistEditEndpoint?: ToggledServiceEndpointPlaylistEditEndpoint
 }
 
@@ -1016,7 +1016,7 @@ export enum ToggledTooltip {
 
 export interface ServiceEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   playlistEditEndpoint?: ServiceEndpointPlaylistEditEndpoint
   signalServiceEndpoint?: UntoggledServiceEndpointSignalServiceEndpoint
   addToPlaylistServiceEndpoint?: AddToPlaylistServiceEndpoint
@@ -1039,11 +1039,11 @@ export enum UntoggledTooltip {
 
 export interface ResultContinuationItemRenderer {
   trigger?: string
-  continuationEndpoint?: IPurpleContinuationEndpoint
+  continuationEndpoint?: PurpleContinuationEndpoint
   button?: A11YSkipNavigationButtonClass
 }
 
-export interface IEngagementPanel {
+export interface EngagementPanel {
   engagementPanelSectionListRenderer?: EngagementPanelSectionListRenderer
 }
 
@@ -1068,7 +1068,7 @@ export interface FluffyContinuationItemRenderer {
 
 export interface FluffyContinuationEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   getTranscriptEndpoint?: GetTranscriptEndpointClass
 }
 
@@ -1083,8 +1083,8 @@ export interface MacroMarkersListRendererContent {
 }
 
 export interface MacroMarkersListItemRenderer {
-  title?: ICancelText
-  timeDescription?: ICancelText
+  title?: CancelText
+  timeDescription?: CancelText
   thumbnail?: Background
   onTap?: OnTap
   trackingParams?: string
@@ -1130,11 +1130,11 @@ export interface TentacledItem {
 
 export interface StickyMenuServiceItemRenderer {
   text?: Subtitle
-  serviceEndpoint?: IOnResponseReceivedEndpoint
+  serviceEndpoint?: OnResponseReceivedEndpoint
   trackingParams?: string
 }
 
-export interface IOnResponseReceivedEndpoint {
+export interface OnResponseReceivedEndpoint {
   clickTrackingParams?: string
   commandMetadata?: OnUnsubscribeEndpointCommandMetadata
   signalServiceEndpoint?: CommandSignalServiceEndpoint
@@ -1161,7 +1161,7 @@ export interface Visibility {
   types?: string
 }
 
-export interface IFrameworkUpdates {
+export interface FrameworkUpdates {
   entityBatchUpdate?: EntityBatchUpdate
 }
 
@@ -1195,7 +1195,7 @@ export interface Timestamp {
   nanos?: number
 }
 
-export interface IPlayerOverlays {
+export interface PlayerOverlays {
   playerOverlayRenderer?: PlayerOverlayRenderer
 }
 
@@ -1234,11 +1234,11 @@ export interface PlayerOverlayRendererAutoplay {
 }
 
 export interface PlayerOverlayAutoplayRenderer {
-  title?: ICancelText
+  title?: CancelText
   videoTitle?: ShortViewCountText
   byline?: Byline
-  cancelText?: ICancelText
-  pauseText?: ICancelText
+  cancelText?: CancelText
+  pauseText?: CancelText
   background?: Background
   countDownSecs?: number
   nextButton?: A11YSkipNavigationButtonClass
@@ -1246,7 +1246,7 @@ export interface PlayerOverlayAutoplayRenderer {
   thumbnailOverlays?: PlayerOverlayAutoplayRendererThumbnailOverlay[]
   preferImmediateRedirect?: boolean
   videoId?: string
-  publishedTimeText?: ICancelText
+  publishedTimeText?: CancelText
   webShowNewAutonavCountdown?: boolean
   webShowBigThumbnailEndscreen?: boolean
   shortViewCountText?: ShortViewCountText
@@ -1289,7 +1289,7 @@ export interface Chapter {
 }
 
 export interface ChapterRenderer {
-  title?: ICancelText
+  title?: CancelText
   timeRangeStartMillis?: number
   onActiveCommand?: OnActiveCommand
   thumbnail?: Background
@@ -1325,7 +1325,7 @@ export interface EndScreen {
 
 export interface WatchNextEndScreenRenderer {
   results?: WatchNextEndScreenRendererResult[]
-  title?: ICancelText
+  title?: CancelText
   trackingParams?: string
 }
 
@@ -1340,10 +1340,10 @@ export interface EndScreenVideoRenderer {
   shortBylineText?: Byline
   lengthText?: ShortViewCountText
   lengthInSeconds?: number
-  navigationEndpoint?: ICurrentVideoEndpointClass
+  navigationEndpoint?: CurrentVideoEndpointClass
   trackingParams?: string
   shortViewCountText?: ShortViewCountText
-  publishedTimeText?: ICancelText
+  publishedTimeText?: CancelText
   thumbnailOverlays?: EndScreenVideoRendererThumbnailOverlay[]
 }
 
@@ -1416,11 +1416,11 @@ export interface VideoDetails {
 }
 
 export interface PlayerOverlayVideoDetailsRenderer {
-  title?: ICancelText
+  title?: CancelText
   subtitle?: Subtitle
 }
 
-export interface IResponseContext {
+export interface ResponseContext {
   serviceTrackingParams?: ServiceTrackingParam[]
   mainAppWebResponseContext?: MainAppWebResponseContext
   webResponseContextExtensionData?: WebResponseContextExtensionData
@@ -1447,10 +1447,10 @@ export interface WebResponseContextExtensionData {
 }
 
 export interface WebPrefetchData {
-  navigationEndpoints?: INavigationEndpointElement[]
+  navigationEndpoints?: NavigationEndpointElement[]
 }
 
-export interface ITopbar {
+export interface Topbar {
   desktopTopbarRenderer?: DesktopTopbarRenderer
 }
 
@@ -1473,7 +1473,7 @@ export interface BackButtonClass {
 
 export interface BackButtonButtonRenderer {
   trackingParams?: string
-  command?: IOnResponseReceivedEndpoint
+  command?: OnResponseReceivedEndpoint
 }
 
 export interface HotkeyDialog {
@@ -1520,7 +1520,7 @@ export interface TopbarLogoRenderer {
 
 export interface Endpoint {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
+  commandMetadata?: AutoplayVideoCommandMetadata
   browseEndpoint?: EndpointBrowseEndpoint
 }
 
@@ -1554,7 +1554,7 @@ export interface WebSearchboxConfig {
 
 export interface FusionSearchboxRendererSearchEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
+  commandMetadata?: AutoplayVideoCommandMetadata
   searchEndpoint?: SearchEndpointSearchEndpoint
 }
 
@@ -1581,7 +1581,7 @@ export interface NotificationTopbarButtonRenderer {
 
 export interface MenuRequest {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   signalServiceEndpoint?: MenuRequestSignalServiceEndpoint
 }
 
@@ -1613,7 +1613,7 @@ export interface PopupMultiPageMenuRenderer {
 
 export interface UpdateUnseenCountEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IContinuationEndpointCommandMetadata
+  commandMetadata?: ContinuationEndpointCommandMetadata
   signalServiceEndpoint?: Signal
 }
 
@@ -1667,13 +1667,13 @@ export interface CompactLinkRenderer {
 
 export interface CompactLinkRendererNavigationEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: IAutoplayVideoCommandMetadata
+  commandMetadata?: AutoplayVideoCommandMetadata
   uploadEndpoint?: UploadEndpoint
   signalNavigationEndpoint?: Signal
-  urlEndpoint?: IURLEndpoint
+  urlEndpoint?: URLEndpoint
 }
 
-export interface IURLEndpoint {
+export interface URLEndpoint {
   url?: string
   target?: string
 }
