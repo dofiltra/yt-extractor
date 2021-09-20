@@ -6,8 +6,9 @@ const debug = async () => {
   })
 
   console.log(
-    await yt.search({
-      query: 'solidity'
+    await yt.channel({
+      // query: 'solidity'
+      channelId: 'UCY0xL8V6NzzFcwzHCgB8orQ'
     })
   )
 }

@@ -1,3 +1,4 @@
+import { IYtChannelResponse } from '../types/channel/channel'
 import { OnResponseReceivedEndpoint } from '../types/comments/comments'
 import { IYtSearchSuggesionItem } from '../types/extractor'
 import { ItemSectionRendererContent, IYtSearchResponse } from '../types/search/search'
@@ -36,6 +37,28 @@ export function extractSearchResponse(searchResponse: IYtSearchResponse) {
     return { result: sectionRender || result }
   } catch (error) {
     return { result, error }
+  }
+}
+
+export function extractChannel(channelResponse: IYtChannelResponse) {
+  try {
+    const tabs = channelResponse?.response?.contents?.singleColumnBrowseResultsRenderer?.tabs
+    const channelFeaturedTab = tabs?.find((x) =>
+      x.tabRenderer?.content?.sectionListRenderer?.contents?.find((y) =>
+        y.itemSectionRenderer?.contents?.find((z) => z.channelFeaturedVideoRenderer)
+      )
+    )
+    const channelFeatured = channelFeaturedTab?.tabRenderer?.content?.sectionListRenderer?.contents
+      ?.find((y) => y.itemSectionRenderer?.contents?.find((z) => z.channelFeaturedVideoRenderer))
+      ?.itemSectionRenderer?.contents?.find((z) => z.channelFeaturedVideoRenderer)?.channelFeaturedVideoRenderer
+
+    return {
+      result: {
+        channelFeatured
+      }
+    }
+  } catch (error) {
+    return { result: {}, error }
   }
 }
 

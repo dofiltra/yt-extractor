@@ -1,4 +1,5 @@
 import { Page } from 'browser-manager'
+import { ChannelFeaturedVideoRenderer } from './channel/channel'
 import { CommentRenderer } from './comments/comments'
 import { ItemSectionRendererContent } from './search/search'
 import {
@@ -14,10 +15,13 @@ export type TYtExtractorSettings = {
   maxOpenedBrowsers?: number
 }
 
+export type TYtChannelResult = {
+  channelFeatured?: ChannelFeaturedVideoRenderer
+}
+
 export type TYtSearchOpts = {
   query: string
 }
-
 
 export type TYtSearchResult = {
   suggestions: IYtSearchSuggesionItem[]

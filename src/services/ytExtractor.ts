@@ -1,7 +1,14 @@
-import { extractCommentsRenderer, extractRelatedItems, extractSearchResponse } from '../helpers/extractorHelpers'
+import { extractChannel, extractCommentsRenderer, extractRelatedItems, extractSearchResponse } from '../helpers/extractorHelpers'
 import { YtExtractorResponse } from '../services/ytExtractorResponse'
 import { CommentRenderer } from '../types/comments/comments'
-import { TYtSearchOpts, TYtVideoOpts, TYtChannelOpts, TYtVideoResult, TYtSearchResult } from '../types/extractor'
+import {
+  TYtSearchOpts,
+  TYtVideoOpts,
+  TYtChannelOpts,
+  TYtVideoResult,
+  TYtSearchResult,
+  TYtChannelResult
+} from '../types/extractor'
 import { FluffyVideoWithContextRenderer } from '../types/video/video'
 
 class YtExtractor extends YtExtractorResponse {
@@ -52,9 +59,19 @@ class YtExtractor extends YtExtractorResponse {
   }
 
   async channel(opts: TYtChannelOpts) {
-    // TODO
+    const { error, result = { channelResponse: {} } } = {
+      ...(await this.channelResponse(opts))
+    }
 
-    return { error: 'not implemented' }
+    if (error) {
+      return { error }
+    }
+
+    const channelExtract: TYtChannelResult = {
+      ...extractChannel(result.channelResponse).result
+    }
+
+    return { result: channelExtract }
   }
 }
 
