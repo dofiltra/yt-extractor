@@ -1,3 +1,4 @@
+import { Page } from 'browser-manager'
 import { CommentRenderer } from './comments'
 import {
   Captions,
@@ -41,4 +42,10 @@ export type TYtVideoResult = {
 
 export type TYtChannelOpts = {
   channelId: string
+}
+
+export type TYtApplyCookieOpts = {
+  page: Page
+  tryIndex?: number
+  tryLimit?: number
 }

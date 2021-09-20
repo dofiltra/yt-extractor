@@ -1,5 +1,6 @@
 import { BrowserManager, devices, Page } from 'browser-manager'
-import { getCommentsRenderer, getRelatedItems } from './helpers/extractorHelpers'
+import { sleep } from 'time-helpers'
+import { getCommentsRenderer, getRelatedItems, getSuggestions } from './helpers/extractorHelpers'
 import { CommentRenderer, IYtCommentsResponse } from './types/comments'
 import {
   TYtSearchOpts,
@@ -7,7 +8,8 @@ import {
   TYtVideoOpts,
   TYtChannelOpts,
   TYtVideoResult,
-  TYtSearchResult
+  TYtSearchResult,
+  TYtApplyCookieOpts
 } from './types/extractor'
 import { IYtSearchResponse } from './types/search-m'
 import { FluffyVideoWithContextRenderer, IVideoMobileResponse } from './types/video-m'
@@ -95,10 +97,10 @@ class YtExtractor {
         return { error: `pwrt: ${!!pwrt} | page: ${!!page}` }
       }
 
-      const { searchResponse, suggestionResponse } = await this.getSearchResponse(pwrt, page, query)
+      const { searchResponse, suggestions } = await this.getSearchResponse(pwrt, page, query)
       await pwrt?.close()
 
-      return { result: { searchResponse, suggestionResponse } }
+      return { result: { searchResponse, suggestions } }
     } catch (error) {
       return { error }
     }
@@ -113,7 +115,7 @@ class YtExtractor {
 
     const pwrt: BrowserManager = await BrowserManager.build({
       launchOpts: {
-        headless: true
+        headless: false
       },
       device: devices['Pixel 5'],
       idleCloseSeconds: 60,
@@ -126,6 +128,7 @@ class YtExtractor {
       await pwrt.close()
       return { error: 'no page' }
     }
+    this.applyCookie({ page })
 
     return { page, pwrt }
   }
@@ -137,9 +140,12 @@ class YtExtractor {
     await page.waitForSelector(selectorSearchButton, {
       timeout: 10e3
     })
+    await this.applyCookie({ page })
     await page.click(selectorSearchButton)
-    await page.type(selectorSearchInput, query)
-    const suggestionResponse = (await pwrt?.getRespResult<any[]>(page, 'suggestqueries')) as any[]
+    await page.type(selectorSearchInput, query, {
+      delay: 10
+    })
+    const suggestionResponse = await pwrt?.getRespResult<any>(page, 'complete/search', undefined, 'text')
 
     await page.press(selectorSearchInput, 'Enter')
     const searchResponse = (await pwrt?.getRespResult<IYtSearchResponse>(
@@ -147,7 +153,9 @@ class YtExtractor {
       `search_query=` // ${query}
     )) as IYtSearchResponse
 
-    return { suggestionResponse, searchResponse }
+    const suggestions = getSuggestions(suggestionResponse)?.result
+
+    return { suggestions, searchResponse }
   }
 
   private async getVideoResponse(pwrt: BrowserManager, page: Page, videoId: string) {
@@ -178,6 +186,30 @@ class YtExtractor {
     )) as IYtCommentsResponse
 
     return commentsResponse
+  }
+
+  private async applyCookie(opts: TYtApplyCookieOpts): Promise<any> {
+    const { page, tryIndex = 0, tryLimit = 5 } = opts
+
+    if (tryIndex >= tryLimit) {
+      return { result: false }
+    }
+
+    const isApplied = await page.evaluate(() => {
+      const el: any = document.querySelectorAll(`.mandatory-consent-v2-kickin .dialog-buttons button`)[1]
+      el?.click()
+      return el
+    })
+    await sleep(1e3)
+
+    if (!isApplied) {
+      return this.applyCookie({
+        ...opts,
+        tryIndex: tryIndex + 1
+      })
+    }
+
+    return { result: isApplied }
   }
 }
 
