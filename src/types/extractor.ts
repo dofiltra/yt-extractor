@@ -16,6 +16,16 @@ export type TYtSearchOpts = {
   query: string
 }
 
+export type TYtSearchResult = {
+  suggestions: IYtSearchSuggesionItem[]
+}
+
+export type IYtSearchSuggesionItem = {
+  keyword: string
+  freq?: number
+  sizes?: number[]
+}
+
 export type TYtVideoOpts = {
   videoId: string
 }

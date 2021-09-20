@@ -1,7 +1,15 @@
 import { BrowserManager, devices, Page } from 'browser-manager'
 import { getCommentsRenderer, getRelatedItems } from './helpers/extractorHelpers'
 import { CommentRenderer, IYtCommentsResponse } from './types/comments'
-import { TYtSearchOpts, TYtExtractorSettings, TYtVideoOpts, TYtChannelOpts, TYtVideoResult } from './types/extractor'
+import {
+  TYtSearchOpts,
+  TYtExtractorSettings,
+  TYtVideoOpts,
+  TYtChannelOpts,
+  TYtVideoResult,
+  TYtSearchResult
+} from './types/extractor'
+import { IYtSearchResponse } from './types/search-m'
 import { FluffyVideoWithContextRenderer, IVideoMobileResponse } from './types/video-m'
 
 class YtExtractor {
@@ -62,7 +70,38 @@ class YtExtractor {
   }
 
   async search(opts: TYtSearchOpts) {
-    // TODO
+    const { error, result = { searchResponse: {}, suggestionResponse: [] } } = {
+      ...(await this.searchResponse(opts))
+    }
+
+    if (error) {
+      return { error }
+    }
+
+    const searchExtract: TYtSearchResult = {
+      suggestions: []
+    }
+
+    return { result: searchExtract }
+  }
+
+  async searchResponse(opts: TYtSearchOpts) {
+    const { query } = opts
+
+    try {
+      const { pwrt, page } = await this.getPwrt(this._mainUrl)
+
+      if (!pwrt || !page) {
+        return { error: `pwrt: ${!!pwrt} | page: ${!!page}` }
+      }
+
+      const { searchResponse, suggestionResponse } = await this.getSearchResponse(pwrt, page, query)
+      await pwrt?.close()
+
+      return { result: { searchResponse, suggestionResponse } }
+    } catch (error) {
+      return { error }
+    }
   }
 
   async channel(opts: TYtChannelOpts) {
@@ -89,6 +128,26 @@ class YtExtractor {
     }
 
     return { page, pwrt }
+  }
+
+  private async getSearchResponse(pwrt: BrowserManager, page: Page, query: string) {
+    const selectorSearchButton = `button.topbar-menu-button-avatar-button c3-icon`
+    const selectorSearchInput = `.searchbox-input`
+
+    await page.waitForSelector(selectorSearchButton, {
+      timeout: 10e3
+    })
+    await page.click(selectorSearchButton)
+    await page.type(selectorSearchInput, query)
+    const suggestionResponse = (await pwrt?.getRespResult<any[]>(page, 'suggestqueries')) as any[]
+
+    await page.press(selectorSearchInput, 'Enter')
+    const searchResponse = (await pwrt?.getRespResult<IYtSearchResponse>(
+      page,
+      `search_query=` // ${query}
+    )) as IYtSearchResponse
+
+    return { suggestionResponse, searchResponse }
   }
 
   private async getVideoResponse(pwrt: BrowserManager, page: Page, videoId: string) {
