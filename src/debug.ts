@@ -1,7 +1,7 @@
-import { YtExtractor } from '.'
+import { YtExtractorHard } from '.'
 
 const debug = async () => {
-  const yt = new YtExtractor({
+  const yt = new YtExtractorHard({
     maxOpenedBrowsers: 1
   })
 

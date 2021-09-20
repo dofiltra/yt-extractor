@@ -1,5 +1,10 @@
-import { extractChannel, extractCommentsRenderer, extractRelatedItems, extractSearchResponse } from '../helpers/extractorHelpers'
-import { YtExtractorResponse } from '../services/ytExtractorResponse'
+import {
+  extractChannel,
+  extractCommentsRenderer,
+  extractRelatedItems,
+  extractSearchResponse
+} from '../helpers/extractorHelpers'
+import { YtExtractorResponse } from './ytExtractorResponse'
 import { CommentRenderer } from '../types/comments/comments'
 import {
   TYtSearchOpts,
@@ -11,7 +16,7 @@ import {
 } from '../types/extractor'
 import { FluffyVideoWithContextRenderer } from '../types/video/video'
 
-class YtExtractor extends YtExtractorResponse {
+class YtExtractorHard extends YtExtractorResponse {
   async video(opts: TYtVideoOpts) {
     const { result = { commentsResponse: {}, videoResponse: [] }, error } = await this.videoResponse(opts)
 
@@ -75,4 +80,4 @@ class YtExtractor extends YtExtractorResponse {
   }
 }
 
-export { YtExtractor }
+export { YtExtractorHard }
