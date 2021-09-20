@@ -2,8 +2,8 @@ import { BrowserManager, Page } from 'browser-manager'
 import { extractSuggestions } from '../helpers/extractorHelpers'
 import { IYtCommentsResponse } from '../types/comments/comments'
 import { TYtSearchOpts, TYtVideoOpts } from '../types/extractor'
-import { IYtSearchResponse } from '../types/search/search-m'
-import { IVideoMobileResponse } from '../types/video/video-m'
+import { IYtSearchResponse } from '../types/search/search'
+import { IVideoMobileResponse } from '../types/video/video'
 import { YtExtractorBase } from './ytExtractorBase'
 
 class YtExtractorResponse extends YtExtractorBase {

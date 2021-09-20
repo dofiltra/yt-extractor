@@ -1,7 +1,7 @@
 import { OnResponseReceivedEndpoint } from '../types/comments/comments'
 import { IYtSearchSuggesionItem } from '../types/extractor'
-import { ItemSectionRendererContent, IYtSearchResponse } from '../types/search/search-m'
-import { SingleColumnWatchNextResults } from '../types/video/video-m'
+import { ItemSectionRendererContent, IYtSearchResponse } from '../types/search/search'
+import { SingleColumnWatchNextResults } from '../types/video/video'
 
 export function extractCommentsRenderer(onResponseReceivedEndpoints?: OnResponseReceivedEndpoint[]) {
   const slotId = 'RELOAD_CONTINUATION_SLOT_BODY'
