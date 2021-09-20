@@ -1,7 +1,7 @@
-import { YtExtractorHard } from './services/ytExtractorHard'
+import { YtExtractor } from './services/ytExtractorHard'
 import { YtExtractorResponse } from './services/ytExtractorResponse'
 
-export { YtExtractorHard, YtExtractorResponse }
+export { YtExtractor, YtExtractorResponse }
 
 /*
 https://www.youtube.com/feeds/videos.xml?channel_id=CHANNELID

@@ -16,7 +16,7 @@ import {
 } from '../types/extractor'
 import { FluffyVideoWithContextRenderer } from '../types/video/video'
 
-class YtExtractorHard extends YtExtractorResponse {
+class YtExtractor extends YtExtractorResponse {
   async video(opts: TYtVideoOpts) {
     const { result = { commentsResponse: {}, videoResponse: [] }, error } = await this.videoResponse(opts)
 
@@ -80,4 +80,4 @@ class YtExtractorHard extends YtExtractorResponse {
   }
 }
 
-export { YtExtractorHard }
+export { YtExtractor }
