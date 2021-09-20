@@ -1,13 +1,13 @@
 import { Page } from 'browser-manager'
-import { CommentRenderer } from './comments'
-import { ItemSectionRendererContent } from './search-m'
+import { CommentRenderer } from './comments/comments'
+import { ItemSectionRendererContent } from './search/search-m'
 import {
   Captions,
   FluffyVideoWithContextRenderer,
   Microformat,
   PlayerResponseVideoDetails,
   StreamingData
-} from './video-m'
+} from './video/video-m'
 
 export type TYtExtractorSettings = {
   appPath?: string

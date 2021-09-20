@@ -1,8 +1,8 @@
 import { extractCommentsRenderer, extractRelatedItems, extractSearchResponse } from './helpers/extractorHelpers'
 import { YtExtractorResponse } from './services/ytExtractorResponse'
-import { CommentRenderer } from './types/comments'
+import { CommentRenderer } from './types/comments/comments'
 import { TYtSearchOpts, TYtVideoOpts, TYtChannelOpts, TYtVideoResult, TYtSearchResult } from './types/extractor'
-import { FluffyVideoWithContextRenderer } from './types/video-m'
+import { FluffyVideoWithContextRenderer } from './types/video/video-m'
 
 class YtExtractor extends YtExtractorResponse {
   async video(opts: TYtVideoOpts) {
