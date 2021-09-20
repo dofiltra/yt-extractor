@@ -72,8 +72,73 @@ export interface ItemSectionRenderer {
 export interface ItemSectionRendererContent {
   promotedSparklesTextSearchRenderer?: PromotedSparklesTextSearchRenderer
   compactVideoRenderer?: CompactVideoRenderer
+  compcatChannelRenderer?: CompactChannelRenderer
   compactPlaylistRenderer?: CompactPlaylistRenderer
   compactRadioRenderer?: CompactRadioRenderer
+}
+
+export interface CompactChannelRenderer {
+  channelId?: string
+  thumbnail?: TvBannerClass
+  displayName?: DisplayName
+  videoCountText?: DisplayName
+  subscriberCountText?: SubscriberCountText
+  navigationEndpoint?: NavigationEndpoint
+  title?: SubscriberCountText
+  trackingParams?: string
+  tvBanner?: TvBannerClass
+}
+
+export interface DisplayName {
+  runs?: Run[]
+}
+
+export interface Run {
+  text?: string
+}
+
+export interface NavigationEndpoint {
+  clickTrackingParams?: string
+  commandMetadata?: CommandMetadata
+  browseEndpoint?: BrowseEndpoint
+}
+
+export interface BrowseEndpoint {
+  browseId?: string
+  canonicalBaseUrl?: string
+}
+
+export interface CommandMetadata {
+  webCommandMetadata?: WebCommandMetadata
+}
+
+export interface WebCommandMetadata {
+  url?: string
+  webPageType?: string
+  rootVe?: number
+  apiUrl?: string
+}
+
+export interface SubscriberCountText {
+  runs?: Run[]
+  accessibility?: Accessibility
+}
+
+export interface Accessibility {
+  accessibilityData?: AccessibilityData
+}
+
+export interface AccessibilityData {
+  label?: string
+}
+export interface TvBannerClass {
+  thumbnails?: ThumbnailElement[]
+}
+
+export interface ThumbnailElement {
+  url?: string
+  width?: number
+  height?: number
 }
 
 export interface CompactPlaylistRenderer {
@@ -204,7 +269,7 @@ export interface Target {
 
 export interface NavigationEndpoint {
   clickTrackingParams?: string
-  commandMetadata?: EndpointCommandMetadata
+  // commandMetadata?: EndpointCommandMetadata
   watchEndpoint?: SecondaryNavigationEndpointWatchEndpoint
 }
 

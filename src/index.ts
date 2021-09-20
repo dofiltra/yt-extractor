@@ -1,4 +1,9 @@
-import { getCommentsRenderer, getRelatedItems, getSuggestions } from './helpers/extractorHelpers'
+import {
+  extractCommentsRenderer,
+  extractRelatedItems,
+  extractSearchResponse,
+  extractSuggestions
+} from './helpers/extractorHelpers'
 import { YtExtractorResponse } from './services/ytExtractorResponse'
 import { CommentRenderer } from './types/comments'
 import { TYtSearchOpts, TYtVideoOpts, TYtChannelOpts, TYtVideoResult, TYtSearchResult } from './types/extractor'
@@ -16,10 +21,10 @@ class YtExtractor extends YtExtractorResponse {
     const { response } = { ...result.videoResponse.find((tab) => tab.response) }
     const { onResponseReceivedEndpoints = [] } = { ...result.commentsResponse }
 
-    const relatedItems: FluffyVideoWithContextRenderer[] = getRelatedItems(
+    const relatedItems: FluffyVideoWithContextRenderer[] = extractRelatedItems(
       response?.contents?.singleColumnWatchNextResults
     )
-    const comments: CommentRenderer[] = getCommentsRenderer(onResponseReceivedEndpoints)
+    const comments: CommentRenderer[] = extractCommentsRenderer(onResponseReceivedEndpoints)
 
     const resultExtract: TYtVideoResult = {
       videoDetails: playerResponse?.videoDetails,
@@ -35,7 +40,7 @@ class YtExtractor extends YtExtractorResponse {
   }
 
   async search(opts: TYtSearchOpts) {
-    const { error, result = { searchResponse: {}, suggestionResponse: [] } } = {
+    const { error, result = { searchResponse: {}, suggestions: [] } } = {
       ...(await this.searchResponse(opts))
     }
 
@@ -44,7 +49,8 @@ class YtExtractor extends YtExtractorResponse {
     }
 
     const searchExtract: TYtSearchResult = {
-      suggestions: []
+      suggestions: result.suggestions,
+      search: extractSearchResponse(result.searchResponse).result
     }
 
     return { result: searchExtract }

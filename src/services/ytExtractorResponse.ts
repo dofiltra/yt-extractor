@@ -1,5 +1,5 @@
 import { BrowserManager, Page } from 'browser-manager'
-import { getSuggestions } from '../helpers/extractorHelpers'
+import { extractSuggestions } from '../helpers/extractorHelpers'
 import { IYtCommentsResponse } from '../types/comments'
 import { TYtSearchOpts, TYtVideoOpts } from '../types/extractor'
 import { IYtSearchResponse } from '../types/search-m'
@@ -66,7 +66,7 @@ class YtExtractorResponse extends YtExtractorBase {
       `search_query=` // ${query}
     )) as IYtSearchResponse
 
-    const suggestions = getSuggestions(suggestionResponse)?.result
+    const suggestions = extractSuggestions(suggestionResponse)?.result
 
     return { suggestions, searchResponse }
   }

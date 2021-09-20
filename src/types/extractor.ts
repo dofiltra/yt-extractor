@@ -1,5 +1,6 @@
 import { Page } from 'browser-manager'
 import { CommentRenderer } from './comments'
+import { ItemSectionRendererContent } from './search-m'
 import {
   Captions,
   FluffyVideoWithContextRenderer,
@@ -19,6 +20,7 @@ export type TYtSearchOpts = {
 
 export type TYtSearchResult = {
   suggestions: IYtSearchSuggesionItem[]
+  search: ItemSectionRendererContent[]
 }
 
 export type IYtSearchSuggesionItem = {

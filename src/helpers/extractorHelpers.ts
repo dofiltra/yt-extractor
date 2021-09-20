@@ -1,8 +1,9 @@
 import { OnResponseReceivedEndpoint } from '../types/comments'
 import { IYtSearchSuggesionItem } from '../types/extractor'
+import { ItemSectionRendererContent, IYtSearchResponse } from '../types/search-m'
 import { SingleColumnWatchNextResults } from '../types/video-m'
 
-export function getCommentsRenderer(onResponseReceivedEndpoints?: OnResponseReceivedEndpoint[]) {
+export function extractCommentsRenderer(onResponseReceivedEndpoints?: OnResponseReceivedEndpoint[]) {
   const slotId = 'RELOAD_CONTINUATION_SLOT_BODY'
   return (
     onResponseReceivedEndpoints
@@ -14,7 +15,7 @@ export function getCommentsRenderer(onResponseReceivedEndpoints?: OnResponseRece
   )
 }
 
-export function getRelatedItems(singleColumnWatchNextResults?: SingleColumnWatchNextResults) {
+export function extractRelatedItems(singleColumnWatchNextResults?: SingleColumnWatchNextResults) {
   const sectionId = 'related-items'
   return (
     singleColumnWatchNextResults?.results?.results?.contents
@@ -24,7 +25,21 @@ export function getRelatedItems(singleColumnWatchNextResults?: SingleColumnWatch
   )
 }
 
-export function getSuggestions(suggestionResponseJson: string) {
+export function extractSearchResponse(searchResponse: IYtSearchResponse) {
+  const result: ItemSectionRendererContent[] = []
+  try {
+    const itemSectionRenderer = searchResponse?.response?.contents?.sectionListRenderer?.contents?.find(
+      (x) => x.itemSectionRenderer
+    )?.itemSectionRenderer
+    const sectionRender = itemSectionRenderer?.contents
+
+    return { result: sectionRender || result }
+  } catch (error) {
+    return { result, error }
+  }
+}
+
+export function extractSuggestions(suggestionResponseJson: string) {
   try {
     const dataJson = suggestionResponseJson.split('\n').sort((a, b) => b.length - a.length)[0]
     const data: any[] = JSON.parse(dataJson)
