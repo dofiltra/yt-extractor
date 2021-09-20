@@ -1,9 +1,10 @@
 import { BrowserManager, Page } from 'browser-manager'
 import { extractSuggestions } from '../helpers/extractorHelpers'
+import { IYtChannelResponse } from '../types/channel/channel'
 import { IYtCommentsResponse } from '../types/comments/comments'
-import { TYtSearchOpts, TYtVideoOpts } from '../types/extractor'
+import { TYtChannelOpts, TYtSearchOpts, TYtVideoOpts } from '../types/extractor'
 import { IYtSearchResponse } from '../types/search/search'
-import { IVideoMobileResponse } from '../types/video/video'
+import { IYtVideoResponse } from '../types/video/video'
 import { YtExtractorBase } from './ytExtractorBase'
 
 class YtExtractorResponse extends YtExtractorBase {
@@ -46,6 +47,25 @@ class YtExtractorResponse extends YtExtractorBase {
     }
   }
 
+  async channelResponse(opts: TYtChannelOpts) {
+    const { channelId } = opts
+
+    try {
+      const { pwrt, page } = await this.getPwrt(this._mainUrl)
+
+      if (!pwrt || !page) {
+        return { error: `pwrt: ${!!pwrt} | page: ${!!page}` }
+      }
+
+      const channelResponse = await this.getChannelResponse(pwrt, page, channelId)
+      await pwrt?.close()
+
+      return { result: { channelResponse } }
+    } catch (error) {
+      return { error }
+    }
+  }
+
   private async getSearchResponse(pwrt: BrowserManager, page: Page, query: string) {
     const selectorSearchButton = `button.topbar-menu-button-avatar-button c3-icon`
     const selectorSearchInput = `.searchbox-input`
@@ -71,19 +91,18 @@ class YtExtractorResponse extends YtExtractorBase {
     return { suggestions, searchResponse }
   }
 
+  private async getChannelResponse(pwrt: BrowserManager, page: Page, channelId: string) {
+    const selector = `a[href^="/watch?v="]`
+    const newHref = `/channelId/${channelId}`
+
+    return await this.responseFromMain<IYtChannelResponse>(pwrt, page, newHref, selector)
+  }
+
   private async getVideoResponse(pwrt: BrowserManager, page: Page, videoId: string) {
     const selector = `a[href^="/watch?v="]`
-    await page?.waitForSelector(selector, {
-      timeout: 10e3
-    })
-
-    const hrefElem = await page?.$(selector)
     const newHref = `/watch?v=${videoId}`
-    await hrefElem?.evaluate((e, { href }) => e.setAttribute('href', href), { href: newHref })
-    await hrefElem?.click()
-    const videoResponse = (await pwrt?.getRespResult<IVideoMobileResponse[]>(page, newHref)) as IVideoMobileResponse[]
 
-    return videoResponse
+    return await this.responseFromMain<IYtVideoResponse[]>(pwrt, page, newHref, selector)
   }
 
   private async getCommentsResponse(pwrt: BrowserManager, page: Page) {
@@ -99,6 +118,19 @@ class YtExtractorResponse extends YtExtractorBase {
     )) as IYtCommentsResponse
 
     return commentsResponse
+  }
+
+  private async responseFromMain<T>(pwrt: BrowserManager, page: Page, newHref: string, selector: string) {
+    await page?.waitForSelector(selector, {
+      timeout: 10e3
+    })
+
+    const hrefElem = await page?.$(selector)
+    await hrefElem?.evaluate((e, { href }) => e.setAttribute('href', href), { href: newHref })
+    await hrefElem?.click()
+    const response = (await pwrt?.getRespResult<T>(page, newHref)) as T
+
+    return response
   }
 }
 

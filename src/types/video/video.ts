@@ -1,4 +1,4 @@
-export interface IVideoMobileResponse {
+export interface IYtVideoResponse {
   page?: string
   rootVe?: string
   preconnect?: string[]

@@ -18,6 +18,7 @@ export type TYtSearchOpts = {
   query: string
 }
 
+
 export type TYtSearchResult = {
   suggestions: IYtSearchSuggesionItem[]
   search: ItemSectionRendererContent[]
