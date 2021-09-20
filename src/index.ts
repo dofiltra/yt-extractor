@@ -1,9 +1,4 @@
-import {
-  extractCommentsRenderer,
-  extractRelatedItems,
-  extractSearchResponse,
-  extractSuggestions
-} from './helpers/extractorHelpers'
+import { extractCommentsRenderer, extractRelatedItems, extractSearchResponse } from './helpers/extractorHelpers'
 import { YtExtractorResponse } from './services/ytExtractorResponse'
 import { CommentRenderer } from './types/comments'
 import { TYtSearchOpts, TYtVideoOpts, TYtChannelOpts, TYtVideoResult, TYtSearchResult } from './types/extractor'
